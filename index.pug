@@ -1,0 +1,95 @@
+- $VER = '1.0';
+
+- 
+   $timetable = [
+      '8:00 - 9:30',
+      '9:50 - 11:20',
+      '11:30 - 13:00',
+      '13:20 - 14:50',
+      '15:00 - 16:30',
+      '16:40 - 18:10',
+   ]
+
+mixin table ($day, $schedule)
+   .table
+      .table__caption
+         strong
+            big= $day[0]
+            | , 
+            = $day[1]
+      .table-wrapper
+         table
+            thead
+               tr
+                  th.small Время
+                  th Предмет
+                  th Задали
+                  th ДЗ
+                  th.small Преподаватель
+            tbody
+               each $subject, $i in $schedule
+                  - 
+                     $row_class = $subject ? '' : 'free';
+                     $curr_class = $i == 2 ? 'curr' : '';
+                     $pending_class = $i == 3 ? 'pending' : '';
+                  tr(class="$row_class $curr_class $pending_class")
+                     td.small= $timetable[$i]
+                     td!= $subject
+                     td
+                     td
+                     td.small
+
+- require './db.php'
+
+doctype html
+html(lang="en")
+   head
+      meta(charset="UTF-8")
+      meta(name="viewport" content="width=device-width, initial-scale=1.0")
+      title Расписание
+      link(rel="stylesheet" href="index.css?ver={$VER}")
+   body
+      center
+         header реклама
+         p.account 
+            | Вы вошли как 
+            strong Никонов Ф. А.
+         h1 
+            | Расписание 
+            span
+               span.pc | 
+               | ПИ-201(2)
+      
+         .switch
+            .switch__el.switch__el_curr Сегодня
+            .switch__el Следующий день
+            .switch__el Неделя
+
+         +table(['Понедельник', '02.11.2020'], [
+            '',
+            '',
+            'Математика',
+            'Физра',
+            '',
+            '<a href="https://moodle.cfuv.ru/course/view.php?id=3508">История</a>',
+         ])
+
+         +table(['Вторник', '03.11.2020'], [
+            'Математика',
+            '',
+            '',
+            '',
+            'ИКТ',
+            '',
+         ])
+
+         +table(['Среда', '04.11.2020'], ['ВЫХОДНОЙ', '', '', '', '', ''])
+         
+         +table(['Четверг', '05.11.2020'], [
+            'Программирование',
+            'Программирование',
+            'Программирование',
+            'Английский',
+            'ИКТ',
+            '',
+         ])
